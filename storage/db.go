@@ -17,16 +17,16 @@ type Config struct {
 	SSLMode string
 }
 
-func NewConnection(config Config) error {
+func NewConnection(config Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s", 
 		config.Host, config.Username, config.Password, config.DBName, config.Port, config.SSLMode)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	db.AutoMigrate(&models.Post{})
-	return nil
+	return db, nil
 }

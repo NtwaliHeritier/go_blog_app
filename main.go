@@ -20,11 +20,12 @@ func main() {
 		SSLMode: os.Getenv("SSLMode"),
 	}
 
-	if err := storage.NewConnection(config); err != nil {
+	db, err := storage.NewConnection(config) 
+	if err != nil {
 		fmt.Println(err)
 		log.Fatal("Invalid database credentials")
 	}
 
-	app := api.App()
+	app := api.App(db)
 	log.Fatal(app.Listen(":3000"))
 }
